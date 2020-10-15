@@ -20,4 +20,5 @@
     <string name="confirm_password_same">Password and confirme Password must be same</string>
     <string name="warning">warning</string>
     <string name="warning_sign_in">Warning Sign In</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
