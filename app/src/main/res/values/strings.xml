@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">VideoMeet</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="video_meeting_conference_app">Video Meeting | Conference</string>
+    <string name="sign_in_to_your_account">Sign in to your account</string>
+    <string name="email">Email</string>
+    <string name="your_mail_here">your@mail.com</string>
+    <string name="password">Password</string>
+    <string name="password_hint">******</string>
+    <string name="sign_in">Sign In</string>
+    <string name="need_account">Need Account??</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="we_need_a_few_details_to_get_your_account_ready">We need a few details to get your account ready</string>
+    <string name="first_name">First Name</string>
+    <string name="john">John</string>
+    <string name="second_name">Last Name</string>
+    <string name="castro">Castro</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_account">Already have account??</string>
+    <string name="confirm_password_same">Password and confirme Password must be same</string>
+    <string name="warning">warning</string>
+    <string name="warning_sign_in">Warning Sign In</string>
 </resources>

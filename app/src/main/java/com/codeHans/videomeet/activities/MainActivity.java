@@ -1,8 +1,10 @@
-package com.codeHans.videomeet;
+package com.codeHans.videomeet.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.codeHans.videomeet.R;
 
 public class MainActivity extends AppCompatActivity {
 
