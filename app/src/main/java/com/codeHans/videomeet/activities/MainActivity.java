@@ -2,25 +2,38 @@ package com.codeHans.videomeet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codeHans.videomeet.R;
+import com.codeHans.videomeet.adapters.UsersAdapter;
+import com.codeHans.videomeet.models.User;
 import com.codeHans.videomeet.utilities.Constants;
 import com.codeHans.videomeet.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
     private PreferenceManager preferenceManager;
-    private TextView textTitle;
+    private List<User> users;
+    private UsersAdapter usersAdapter;
+
+    private TextView textTitle, txtVErrorMessage;
+    private ProgressBar usersProgressBar;
+    private RecyclerView userRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
+
         textTitle = findViewById(R.id.txtV_title);
         textTitle.setText(String.format("%s %s",
                 preferenceManager.getString(Constants.KEY_FIRST_NAME),
@@ -42,6 +56,51 @@ public class MainActivity extends AppCompatActivity {
                 sendFCMTokenDatabase(task.getResult().getToken());
             }
         });
+
+        userRecyclerView = findViewById(R.id.userRecyclerView);
+        txtVErrorMessage = findViewById(R.id.txtV_ErrorMessage);
+        usersProgressBar = findViewById(R.id.pb_usersProgressBar);
+
+        users = new ArrayList<>();
+        usersAdapter = new UsersAdapter(users);
+        userRecyclerView.setAdapter(usersAdapter);
+
+        getUsers();
+    }
+
+    private void getUsers() {
+        usersProgressBar.setVisibility(View.VISIBLE);
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    usersProgressBar.setVisibility(View.GONE);
+                    String myUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            // TODO principal user continue
+                            if (myUserId.equals(documentSnapshot.getId())) {
+                                continue;
+                            }
+                            User user = new User();
+                            user.firstName = documentSnapshot.getString(Constants.KEY_FIRST_NAME);
+                            user.lastName = documentSnapshot.getString(Constants.KEY_LAST_NAME);
+                            user.email = documentSnapshot.getString(Constants.KEY_EMAIL);
+                            user.token = documentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                            users.add(user);
+                        }
+                        if (users.size() > 0) {
+                            usersAdapter.notifyDataSetChanged();
+                        } else {
+                            txtVErrorMessage.setText(String.format("%s", R.string.warning_users));
+                            txtVErrorMessage.setVisibility(View.VISIBLE);
+                        }
+
+                    } else {
+                        txtVErrorMessage.setText(String.format("%s", R.string.warning_users));
+                        txtVErrorMessage.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     private void sendFCMTokenDatabase(String token) {
@@ -51,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         preferenceManager.getString(Constants.KEY_USER_ID)
                 );
         documentReference.update(Constants.KEY_FCM_TOKEN, token)
-                .addOnSuccessListener(aVoid -> Toast.makeText(MainActivity.this, "Token Update Successfully", Toast.LENGTH_LONG).show())
+                // .addOnSuccessListener(aVoid -> Toast.makeText(MainActivity.this, "Token Update Successfully", Toast.LENGTH_LONG).show())
                 .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Unable to send Token" + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
