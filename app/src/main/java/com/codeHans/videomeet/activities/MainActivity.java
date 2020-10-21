@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.codeHans.videomeet.R;
 import com.codeHans.videomeet.adapters.UsersAdapter;
+import com.codeHans.videomeet.listeners.UsersListener;
 import com.codeHans.videomeet.models.User;
 import com.codeHans.videomeet.utilities.Constants;
 import com.codeHans.videomeet.utilities.PreferenceManager;
@@ -24,16 +25,17 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UsersListener {
 
     private PreferenceManager preferenceManager;
     private List<User> users;
     private UsersAdapter usersAdapter;
 
     private TextView textTitle, txtVErrorMessage;
-    private ProgressBar usersProgressBar;
     private RecyclerView userRecyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,24 +61,27 @@ public class MainActivity extends AppCompatActivity {
 
         userRecyclerView = findViewById(R.id.userRecyclerView);
         txtVErrorMessage = findViewById(R.id.txtV_ErrorMessage);
-        usersProgressBar = findViewById(R.id.pb_usersProgressBar);
 
         users = new ArrayList<>();
-        usersAdapter = new UsersAdapter(users);
+        usersAdapter = new UsersAdapter(users, this);
         userRecyclerView.setAdapter(usersAdapter);
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshMain);
+        swipeRefreshLayout.setOnRefreshListener(this::getUsers);
 
         getUsers();
     }
 
     private void getUsers() {
-        usersProgressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
-                    usersProgressBar.setVisibility(View.GONE);
+                    swipeRefreshLayout.setRefreshing(false);
                     String myUserId = preferenceManager.getString(Constants.KEY_USER_ID);
                     if (task.isSuccessful() && task.getResult() != null) {
+                        users.clear();
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             // TODO principal user continue
                             if (myUserId.equals(documentSnapshot.getId())) {
@@ -130,5 +135,39 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Unable to sign out", Toast.LENGTH_LONG).show());
+    }
+
+    @Override
+    public void initiateVideoMeeting(User user) {
+        if (user.token == null || user.token.trim().isEmpty()) {
+            Toast.makeText(
+                    this,
+                    user.firstName + " " + user.lastName + " " + R.string.user_not_available,
+                    Toast.LENGTH_LONG
+            ).show();
+        } else {
+            Toast.makeText(
+                    this,
+                    user.firstName + " " + user.lastName + " " + R.string.user_available,
+                    Toast.LENGTH_LONG
+            ).show();
+        }
+    }
+
+    @Override
+    public void initiateAudioMeeting(User user) {
+        if (user.token == null || user.token.trim().isEmpty()) {
+            Toast.makeText(
+                    this,
+                    user.firstName + " " + user.lastName + " " + R.string.user_not_available,
+                    Toast.LENGTH_LONG
+            ).show();
+        } else {
+            Toast.makeText(
+                    this,
+                    user.firstName + " " + user.lastName + " " + R.string.user_available,
+                    Toast.LENGTH_LONG
+            ).show();
+        }
     }
 }

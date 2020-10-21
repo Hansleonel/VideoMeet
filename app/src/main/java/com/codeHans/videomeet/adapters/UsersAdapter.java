@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codeHans.videomeet.R;
+import com.codeHans.videomeet.listeners.UsersListener;
 import com.codeHans.videomeet.models.User;
 
 import java.util.List;
@@ -17,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
     private List<User> users;
+    private UsersListener usersListener;
 
-    public UsersAdapter(List<User> users) {
+    public UsersAdapter(List<User> users, UsersListener usersListener) {
         this.users = users;
+        this.usersListener = usersListener;
     }
 
     @NonNull
@@ -45,7 +48,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
 
-    static class UserViewHolder extends RecyclerView.ViewHolder {
+    class UserViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtVFirstChar, txtVUserName, txtVEmail;
         ImageView imgAudioMeeting, imgVideoMeeting;
@@ -63,6 +66,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             txtVFirstChar.setText(user.firstName.substring(0, 1));
             txtVUserName.setText(String.format("%s %s", user.firstName, user.lastName));
             txtVEmail.setText(user.email);
+            imgAudioMeeting.setOnClickListener(view -> usersListener.initiateAudioMeeting(user));
+            imgVideoMeeting.setOnClickListener(view -> usersListener.initiateVideoMeeting(user));
         }
     }
 }

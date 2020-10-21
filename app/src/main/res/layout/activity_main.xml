@@ -41,17 +41,25 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:padding="@dimen/_5sdp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lV_header_main"
-        tools:listitem="@layout/item_container_user" />
+        app:layout_constraintTop_toBottomOf="@id/lV_header_main">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:padding="@dimen/_5sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_container_user" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <TextView
         android:id="@+id/txtV_ErrorMessage"
@@ -64,16 +72,6 @@
         android:textColor="@android:color/holo_red_light"
         android:textSize="@dimen/_13ssp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/lV_header_main" />
-
-    <ProgressBar
-        android:id="@+id/pb_usersProgressBar"
-        android:layout_width="@dimen/_25sdp"
-        android:layout_height="@dimen/_25sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lV_header_main" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

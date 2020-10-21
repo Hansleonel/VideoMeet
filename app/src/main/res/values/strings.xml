@@ -18,6 +18,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="already_have_account">Already have account??</string>
     <string name="confirm_password_same">Password and confirme Password must be same</string>
+    <string name="user_not_available">is not available for meeting</string>
+    <string name="user_available">Great, is available for meeting</string>
     <string name="warning">warning</string>
     <string name="warning_sign_in">Warning Sign In</string>
     <string name="warning_users">No Users available</string>
