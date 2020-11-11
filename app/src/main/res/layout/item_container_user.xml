@@ -35,10 +35,10 @@
         android:contentDescription="@string/app_name"
         android:padding="@dimen/_2sdp"
         android:src="@drawable/ic_video"
-        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/viewDivider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/imgV_AudioMeeting"
@@ -48,10 +48,10 @@
         android:contentDescription="@string/app_name"
         android:padding="@dimen/_4sdp"
         android:src="@drawable/ic_audio"
-        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/viewDivider"
         app:layout_constraintEnd_toStartOf="@+id/imgV_VideoMeeting"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/txtV_user_name"

@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements UsersListener {
                         if (users.size() > 0) {
                             usersAdapter.notifyDataSetChanged();
                         } else {
-                            txtVErrorMessage.setText(String.format("%s", R.string.warning_users));
+                            txtVErrorMessage.setText(String.format("%s", "No Users available"));
                             txtVErrorMessage.setVisibility(View.VISIBLE);
                         }
 
                     } else {
-                        txtVErrorMessage.setText(String.format("%s", R.string.warning_users));
+                        txtVErrorMessage.setText(String.format("%s", "No Users available"));
                         txtVErrorMessage.setVisibility(View.VISIBLE);
                     }
                 });
@@ -142,15 +142,19 @@ public class MainActivity extends AppCompatActivity implements UsersListener {
         if (user.token == null || user.token.trim().isEmpty()) {
             Toast.makeText(
                     this,
-                    user.firstName + " " + user.lastName + " " + R.string.user_not_available,
+                    user.firstName + " " + user.lastName + " " + "is not available for Video meeting",
                     Toast.LENGTH_LONG
             ).show();
         } else {
             Toast.makeText(
                     this,
-                    user.firstName + " " + user.lastName + " " + R.string.user_available,
+                    user.firstName + " " + user.lastName + " " + "Great, is available for Video meeting",
                     Toast.LENGTH_LONG
             ).show();
+            Intent intent = new Intent(getApplicationContext(), OutgoingInvitationActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("type", "video");
+            startActivity(intent);
         }
     }
 
@@ -159,13 +163,13 @@ public class MainActivity extends AppCompatActivity implements UsersListener {
         if (user.token == null || user.token.trim().isEmpty()) {
             Toast.makeText(
                     this,
-                    user.firstName + " " + user.lastName + " " + R.string.user_not_available,
+                    user.firstName + " " + user.lastName + " " + "is not available for Audio meeting",
                     Toast.LENGTH_LONG
             ).show();
         } else {
             Toast.makeText(
                     this,
-                    user.firstName + " " + user.lastName + " " + R.string.user_available,
+                    user.firstName + " " + user.lastName + " " + "Great, is available for Audio meeting",
                     Toast.LENGTH_LONG
             ).show();
         }
